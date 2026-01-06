@@ -21,18 +21,13 @@ function App() {
       const res = await axios.post(`${url}/admin/signin`, formData);
       const { expired, token } = res.data;
       document.cookie = `hexToken=${token}; expires=${new Date(expired)};`;
+      axios.defaults.headers.common['Authorization'] = token;
       setIsAuth(true);
       getProducts();
     } catch (error) {
       alert(error.response.data.message);
     }
   }
-
-  const token = document.cookie.replace(
-    /(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/,
-    "$1",
-  );
-  axios.defaults.headers.common['Authorization'] = token;
 
   async function getProducts() {
     try {
